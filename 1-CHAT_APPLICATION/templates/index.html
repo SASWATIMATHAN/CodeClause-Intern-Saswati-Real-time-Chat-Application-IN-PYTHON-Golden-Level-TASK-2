@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body style= "text-align:center; font-family:Arial, serif; font-size:14pt">
+<div id="messages" style="margin: 0 auto; width: 60%; text-align: left; min-height:300px"></div>
+<input type="text" id="username" placeholder="Username" required>
+<input type="text" id="message" placeholder="Message" required>
+<button id="sendBtn">Send</button>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var socket = io.connect("http://192.168.0.103:5000");
+        socket.on('connect', function(){
+            socket.send("User connected!");
+        });
+
+        socket.on('message', function(data) {
+            $("#messages").append($("<p>").text(data)); // Corrected the syntax here
+        });
+
+        $('#sendBtn').on('click', function() {
+            socket.send($('#username').val() + ': ' + $('#message').val()); // Added missing # selector
+            $('#message').val(''); // Added missing # selector
+        });
+    });
+</script>
+</body>
+</html>
